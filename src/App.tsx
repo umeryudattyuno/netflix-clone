@@ -1,6 +1,6 @@
 import { Row } from './Row'
 import './App.css'
-import { requests } from './request'
+import { requests } from './requests'
 import { Banner } from './Banner';
 import { Nav } from './Nav';
 

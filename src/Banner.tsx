@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "./axios";
-import { requests } from "./request";
+import { requests } from "./requests";
 import "./Banner.scss";
+
 
 type MovieProps = {
   title?: string;
@@ -13,15 +14,16 @@ type MovieProps = {
 
 export const Banner = () => {
   const [movie, setMovie] = useState<MovieProps>({});
+  const [, setIndex] = useState(0);
+  const [movies, setMovies] = useState<MovieProps[]>([]);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const request = await axios.get(requests.fetchNetflixOriginals);  // feachNetflixOriginals が fetchNetflixOriginals の誤りなのでは？
-        console.log(request.data.result);
-
+        const request = await axios.get(requests.fetchNetflixOriginals);
         if (request.data.results.length > 0) {
-          setMovie(request.data.results[Math.floor(Math.random() * request.data.results.length)]);
+          setMovies(request.data.results);
+          setMovie(request.data.results[0]); // 初期映画設定
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -30,7 +32,17 @@ export const Banner = () => {
     fetchData();
   }, []);
 
-  console.log(movie);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex(prevIndex => {
+        const nextIndex = (prevIndex + 1) % movies.length;
+        setMovie(movies[nextIndex]);
+        return nextIndex;
+      });
+    }, 10000); // 10秒ごとにバナーを更新
+
+    return () => clearInterval(interval); // コンポーネントアンマウント時にインターバルをクリア
+  }, [movies]);
 
   function truncate(str: string, n: number): string | undefined {
     if (!str) return undefined;

@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Nav.scss";
 
-type Props = {
-  className?: string;
-};
-
-export const Nav = (props: Props) => {
+export const Nav = () => {
   const [show, setShow] = useState(false);
   useEffect(() => {
     const handleShow = () => {

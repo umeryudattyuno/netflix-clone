@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "./axios";
 import "./Row.scss";
-import { API_KEY } from "./request";
+import { API_KEY } from "./requests";
 import YouTube from "react-youtube";
 import movieTrailer from 'movie-trailer';
 

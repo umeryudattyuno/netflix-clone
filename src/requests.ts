@@ -1,7 +1,6 @@
 
 export const API_KEY = "bbb372a51a40a08c1ae5971eae51bb9d"; // TMDBのAPIKeyを入れる
 const BASE_MOVIE_URL = "/discover/movie?api_key=";
-const BASE_TV_URL = "/discover/tv?api_key=";
 
 export const requests ={
     fetchTrending:`/trending/all/week?api_key=${API_KEY}&language=ja`,
