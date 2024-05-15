@@ -5,7 +5,6 @@ import { API_KEY } from "./requests";
 import YouTube from "react-youtube";
 import movieTrailer from 'movie-trailer';
 
-
 const base_url = "https://image.tmdb.org/t/p/original";
 
 type Props = {
@@ -16,11 +15,11 @@ type Props = {
 
 type Movie = {
   id: string;
-  name: string;
-  title: string;
-  original_name: string;
-  poster_path: string;
-  backdrop_path: string;
+  name?: string;
+  title?: string;
+  original_name?: string;
+  poster_path?: string;
+  backdrop_path?: string;
 };
 
 type Options = {
@@ -37,8 +36,12 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const request = await axios.get(fetchUrl);
-      setMovies(request.data.results);
+      try {
+        const request = await axios.get(fetchUrl);
+        setMovies(request.data.results || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     }
     fetchData();
   }, [fetchUrl]);
@@ -63,12 +66,11 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
         if (trailerId) {
           setTrailerUrl(trailerId);
         } else {
-          movieTrailer(movie?.name || movie?.title || movie?.original_name || "")
-            .then((url: string) => {
-              const urlParams = new URLSearchParams(new URL(url).search);
-              setTrailerUrl(urlParams.get("v"));
-            })
-            .catch((error: any) => console.error('Error loading trailer:', error.message));
+          const trailerUrl = await movieTrailer(movie?.name || movie?.title || movie?.original_name || "");
+          if (trailerUrl) {
+            const urlParams = new URLSearchParams(new URL(trailerUrl).search);
+            setTrailerUrl(urlParams.get("v"));
+          }
         }
       } catch (error) {
         console.error('Error fetching trailer:', error);
@@ -85,7 +87,7 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
             key={movie.id}
             className={`Row-poster ${isLargeRow ? "Row-poster-large" : ""}`}
             src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path}`}
-            alt={movie.name}
+            alt={movie.name || movie.title || movie.original_name || "Movie"}
             onClick={() => handleClick(movie)}
           />
         ))}
