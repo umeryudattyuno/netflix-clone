@@ -60,7 +60,7 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
     } else {
       try {
         const trailerResponse = await axios.get(
-          `/movie/${movie.id}/videos?api_key=${API_KEY}`
+          `/tv/${movie.id}/videos?api_key=${API_KEY}`
         );
         const trailerId = trailerResponse.data.results[0]?.key;
         if (trailerId) {
@@ -70,6 +70,8 @@ export const Row = ({ title, fetchUrl, isLargeRow }: Props) => {
           if (trailerUrl) {
             const urlParams = new URLSearchParams(new URL(trailerUrl).search);
             setTrailerUrl(urlParams.get("v"));
+          } else {
+            console.error('No trailer found for this movie.');
           }
         }
       } catch (error) {

@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.43.2",
     "axios": "^1.6.8",
     "movie-trailer": "^3.2.2",
     "react": "^18.2.0",
